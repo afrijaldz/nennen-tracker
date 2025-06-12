@@ -2,7 +2,7 @@
 
 **Nen Tracker** is a simple, mobile-first PWA (Progressive Web App) for tracking breastfeeding sessions. It helps caregivers log which breast was used (left or right), when the session started, and how long it lasted — all offline-capable and installable to your device.
 
-![Screenshot](public/screenshot1.png)
+![Screenshot](public/screenshotx.png)
 
 ---
 

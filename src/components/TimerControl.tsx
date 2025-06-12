@@ -1,5 +1,5 @@
 // src/components/TimerControl.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { saveHistory } from "../services/storage";
 import { v4 as uuidv4 } from "uuid";
 import type { History } from "../types/history";
@@ -14,37 +14,40 @@ function formatDuration(seconds: number): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function TimerControl({ onNewLog }: { onNewLog: any }) {
   const [side, setSide] = useState<"left" | "right" | null>();
-  const [startTime, setStartTime] = useState<Date | null>();
+  const [startTime, setStartTime] = useState<Date | null>(() => {
+    const savedTime = localStorage.getItem("startTime");
+    return savedTime ? new Date(savedTime) : null;
+  });
   const [duration, setDuration] = useState<number | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
-  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    return () => {
-      const intervalId = intervalRef.current;
-      if (intervalId !== null) {
-        clearInterval(intervalId);
-      }
-    };
-  }, []);
+    let interval: number | undefined;
+
+    if (startTime) {
+      interval = setInterval(() => {
+        const now = Date.now();
+
+        setElapsedSeconds(
+          Math.floor((now - new Date(startTime).getTime()) / 1000)
+        );
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [startTime]);
 
   const handleStart = (selectedSide: "left" | "right") => {
     setSide(selectedSide);
     setStartTime(new Date());
     setDuration(null);
-    setElapsedSeconds(0);
-    intervalRef.current = setInterval(() => {
-      setElapsedSeconds((prev) => prev + 1);
-    }, 1000);
+
+    localStorage.setItem("startTime", new Date().toISOString());
+    localStorage.setItem("side", selectedSide);
   };
 
   const handleStop = async () => {
     if (!startTime || !side) return;
-
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current);
-    }
-    intervalRef.current = null;
 
     const endTime = new Date();
     const minutes = Math.round(
@@ -67,6 +70,8 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
     setStartTime(null);
     setDuration(minutes);
     setElapsedSeconds(0);
+    localStorage.removeItem("startTime");
+    localStorage.removeItem("side");
   };
 
   return (

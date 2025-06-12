@@ -32,7 +32,16 @@ export default function HistoryList({ newLogTrigger }: { newLogTrigger: any }) {
               {log.durationMinutes} menit
             </p>
             <p className="text-sm text-gray-500">
-              {new Date(log.startTime).toLocaleString()}
+              {new Date(log.startTime).toLocaleString("id-ID", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "2-digit",
+                dayPeriod: "short",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
             </p>
           </li>
         ))}

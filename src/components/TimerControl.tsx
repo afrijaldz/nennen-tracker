@@ -98,7 +98,15 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
             Menyusui di sisi:{" "}
             <strong>{side === "left" ? "Kiri" : "Kanan"}</strong>
           </p>
-          <p className="mb-2">Mulai pada: {startTime.toLocaleTimeString()}</p>
+          <p className="mb-2">
+            Mulai pada:{" "}
+            {startTime.toLocaleTimeString("id-ID", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              dayPeriod: "short",
+            })}
+          </p>
           <p className="text-2xl font-mono mt-2">
             {formatDuration(elapsedSeconds)}
           </p>
@@ -110,8 +118,11 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
           </button>
         </div>
       )}
-      {duration && (
-        <p className="mt-4 text-green-700">Tersimpan: {duration} menit</p>
+
+      {duration !== null && duration > 0 && (
+        <div>
+          <p className="mt-4 text-green-700">Tersimpan: {duration} menit</p>
+        </div>
       )}
     </div>
   );

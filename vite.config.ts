@@ -9,6 +9,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'Nen Tracker',
         short_name: 'NenNen',
@@ -30,7 +33,9 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         orientation: 'portrait',
+        id: '/',
       }
     })
   ],
 })
+

@@ -110,12 +110,26 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
           <p className="text-2xl font-mono mt-2">
             {formatDuration(elapsedSeconds)}
           </p>
-          <button
-            className="bg-green-600 text-white py-2 px-6 rounded-xl mt-3"
-            onClick={handleStop}
-          >
-            Selesai
-          </button>
+          <div className="flex justify-center items-center mt-4">
+            <button
+              className="bg-green-600 text-white py-2 px-6 rounded-xl grow cursor-pointer"
+              onClick={handleStop}
+            >
+              Selesai
+            </button>
+            <button
+              className="py-2 px-6 rounded-xl cursor-pointer"
+              onClick={() => {
+                setStartTime(null);
+                setDuration(null);
+                setElapsedSeconds(0);
+                localStorage.removeItem("startTime");
+                localStorage.removeItem("side");
+              }}
+            >
+              <span className="text-xs text-gray-500 ml-2">Reset Timer</span>
+            </button>
+          </div>
         </div>
       )}
 

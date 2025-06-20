@@ -46,8 +46,21 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
     localStorage.setItem("side", selectedSide);
   };
 
+  const resetTimer = () => {
+    setStartTime(null);
+    setSide(null);
+    setDuration(null);
+    setElapsedSeconds(0);
+    localStorage.removeItem("startTime");
+    localStorage.removeItem("side");
+  };
+
   const handleStop = async () => {
-    if (!startTime || !side) return;
+    if (!startTime || !side) {
+      alert(`Timer belum dimulai! ${startTime} - ${side}`);
+      resetTimer();
+      return;
+    }
 
     const endTime = new Date();
     const minutes = Math.round(
@@ -66,12 +79,8 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
       onNewLog(log);
     }
 
-    setSide(null);
-    setStartTime(null);
-    setDuration(minutes);
-    setElapsedSeconds(0);
-    localStorage.removeItem("startTime");
-    localStorage.removeItem("side");
+    alert(`Menyusui selesai! Durasi: ${minutes} menit`);
+    resetTimer();
   };
 
   return (
@@ -119,13 +128,7 @@ export default function TimerControl({ onNewLog }: { onNewLog: any }) {
             </button>
             <button
               className="py-2 px-6 rounded-xl cursor-pointer"
-              onClick={() => {
-                setStartTime(null);
-                setDuration(null);
-                setElapsedSeconds(0);
-                localStorage.removeItem("startTime");
-                localStorage.removeItem("side");
-              }}
+              onClick={() => resetTimer()}
             >
               <span className="text-xs text-gray-500 ml-2">Reset Timer</span>
             </button>
